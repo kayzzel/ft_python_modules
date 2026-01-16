@@ -1,6 +1,6 @@
 class Plant:
     """
-    Represents a plant with a name, height, and age in days.
+    Represents a plant with a name, height, age, and status.
     """
 
     def __init__(
@@ -17,6 +17,7 @@ class Plant:
             name (str): Name of the plant.
             height (int): Height of the plant in centimeters.
             days_old (int): Age of the plant in days.
+            status (str): Classification status of the plant.
         """
         self.name: str = name
         self._height: int = height
@@ -37,20 +38,16 @@ class Plant:
 
     def set_height(self, height: int) -> None:
         """
-        Set the height of the plant with validation.
+        Update the plant height with validation.
 
-        Rejects non-integer and negative values and prints a security message
-        when an invalid operation is attempted.
-
-        Args:
-            height (int): New height of the plant in centimeters.
+        Rejects non-integer or negative values.
         """
-        if (type(height) is not int):
+        if type(height) is not int:
             print("""
 Invalid operation attempted: height {height}cm [REJECTED]
 Security: Non Interger height rejected
                   """)
-        elif (height < 0):
+        elif height < 0:
             print("""
 Invalid operation attempted: height {height}cm [REJECTED]
 Security: Negative height rejected
@@ -60,16 +57,20 @@ Security: Negative height rejected
             print(f"Height updated: {self._height}cm [OK]")
 
     def set_status(self, status: str) -> None:
-        if (type(status) is not str):
+        """
+        Update the plant status with validation.
+
+        Accepted values: Plant, FloweringPlant, PrizeFlower.
+        """
+        if type(status) is not str:
             print("""
 Invalid operation attempted: status -> {status} [REJECTED]
 Security: Non String status rejected
                   """)
-        elif (status != "Plant" and status != "FloweringPlant"
-                and status != "PrizeFlower"):
+        elif status not in {"Plant", "FloweringPlant", "PrizeFlower"}:
             print("""
 Invalid operation attempted: status -> {status} [REJECTED]
-Security: Non vvalid status value rejected
+Security: Non valid status value rejected
                   """)
         else:
             self._status = status
@@ -77,20 +78,14 @@ Security: Non vvalid status value rejected
 
     def set_age(self, age: int) -> None:
         """
-        Set the age of the plant with validation.
-
-        Rejects non-integer and negative values and prints a security message
-        when an invalid operation is attempted.
-
-        Args:
-            age (int): New age of the plant in days.
+        Update the plant age with validation.
         """
-        if (type(age) is not int):
+        if type(age) is not int:
             print("""
 Invalid operation attempted: age {age} days [REJECTED]
 Security: Non Interger age rejected
                   """)
-        elif (age < 0):
+        elif age < 0:
             print("""
 Invalid operation attempted: age {age}cm [REJECTED]
 Security: Negative age rejected
@@ -100,36 +95,36 @@ Security: Negative age rejected
             print(f"Height updated: {self._days_old} days [OK]")
 
     def get_status(self) -> str:
+        """
+        Return the plant status.
+        """
         return self._status
 
     def get_height(self) -> int:
         """
-        Get the current height of the plant.
-
-        Returns:
-            int: Height of the plant in centimeters.
+        Return the plant height.
         """
         return self._height
 
     def get_age(self) -> int:
         """
-        Get the current age of the plant.
-
-        Returns:
-            int: Age of the plant in days.
+        Return the plant age.
         """
         return self._days_old
 
     def get_info(self) -> None:
         """
-        Print the plant's name, height, and age.
+        Print basic plant information.
         """
         print(f"{self.name} : {self._height}cm, {self._days_old} days old")
 
 
+# ====================================================================
+
+
 class Flower(Plant):
     """
-    Represents a flowering plant with a color and blooming behavior.
+    Represents a flowering plant with bloom behavior.
     """
 
     def __init__(
@@ -142,23 +137,14 @@ class Flower(Plant):
             ) -> None:
         """
         Initialize a Flower instance.
-
-        Args:
-            name (str): Name of the flower.
-            height (int): Height of the flower in centimeters.
-            days_old (int): Age of the flower in days.
-            color (str): Color of the flower.
         """
-        super().__init__(name, height, days_old)
+        super().__init__(name, height, days_old, status)
         self.color = color
         self.bloomed = False
 
     def bloom(self) -> None:
         """
-        Trigger the blooming process of the flower.
-
-        Prints a message indicating whether the flower is blooming
-        or has already bloomed.
+        Trigger blooming if the flower has not bloomed yet.
         """
         if not self.bloomed:
             print(f"{self.name} is blooming beautifully!")
@@ -168,7 +154,7 @@ class Flower(Plant):
 
     def get_info(self) -> None:
         """
-        Print detailed information about the flower.
+        Print detailed flower information.
         """
         print(f"{self.name} (Flower): {self._height}cm, "
               f"{self._days_old} days old, color : {self.color}")
@@ -176,7 +162,7 @@ class Flower(Plant):
 
 class Tree(Plant):
     """
-    Represents a tree with a trunk diameter and shade-producing capability.
+    Represents a tree capable of producing shade.
     """
 
     def __init__(
@@ -189,27 +175,21 @@ class Tree(Plant):
             ) -> None:
         """
         Initialize a Tree instance.
-
-        Args:
-            name (str): Name of the tree.
-            height (int): Height of the tree in centimeters.
-            days_old (int): Age of the tree in days.
-            trunk_diameter (int): Diameter of the trunk in centimeters.
         """
         super().__init__(name, height, days_old, status)
         self.trunk_diameter = trunk_diameter
 
     def produce_shade(self) -> None:
         """
-        Calculate and display the shade area produced by the tree.
+        Calculate and display shade area.
         """
         shade_area: float = self._height // 2 * self.trunk_diameter * 7 / 10000
-        print(f"{self.name} provides {round(shade_area, 2)} "
-              f"square meters of shade")
+        print(f"{self.name} provides {round(shade_area, 2)} \
+square meters of shade")
 
     def get_info(self) -> None:
         """
-        Print detailed information about the tree.
+        Print detailed tree information.
         """
         print(f"{self.name} (Tree): {self._height}cm, "
               f"{self._days_old} days old, {self.trunk_diameter}cm diameter")
@@ -217,7 +197,7 @@ class Tree(Plant):
 
 class Vegetable(Plant):
     """
-    Represents a vegetable plant with harvest and nutritional information.
+    Represents a vegetable plant with harvest information.
     """
 
     def __init__(
@@ -231,13 +211,6 @@ class Vegetable(Plant):
             ) -> None:
         """
         Initialize a Vegetable instance.
-
-        Args:
-            name (str): Name of the vegetable.
-            height (int): Height of the vegetable in centimeters.
-            days_old (int): Age of the vegetable in days.
-            harvest_season (str): Season in which the vegetable is harvested.
-            nutritional_value (str): Main nutritional benefit of the vegetable.
         """
         super().__init__(name, height, days_old, status)
         self.nutritional_value = nutritional_value
@@ -245,170 +218,190 @@ class Vegetable(Plant):
 
     def get_info(self) -> None:
         """
-        Print detailed information about the vegetable.
+        Print detailed vegetable information.
         """
         print(f"{self.name} (Vegetable): {self._height}cm, "
               f"{self._days_old} days old, {self.harvest_season} harvest")
         print(f"{self.name} is rich in {self.nutritional_value}")
 
 
+# ====================================================================
+
+
 class Garden:
+    """
+    Represents a garden containing multiple plants.
+    """
+
     def __init__(
             self,
             owner: str,
             name: str,
             plants: list[Plant | Flower | Tree | Vegetable] = []
             ):
-        self.owner: str = owner
-        self.name: str = name
-        self._plants: list[Plant | Flower | Tree | Vegetable] = plants
+        """
+        Initialize a Garden instance.
+        """
+        self.owner = owner
+        self.name = name
+        self._plants = plants
         self._total_growth = 0
 
-    def add_plant(self, plant: Plant | Flower | Tree | Vegetable):
+    def add_plant(self, plant: Plant | Flower | Tree | Vegetable) -> None:
+        """
+        Add a plant to the garden.
+        """
         self._plants = self._plants + [plant]
         print(f"Added {plant.name} to {self.name}'s garden")
 
-    def garden_growth(self):
+    def garden_growth(self) -> None:
+        """
+        Grow all plants in the garden by one unit.
+        """
         print(f"{self.name} is helping all plants grow...")
         for plant in self._plants:
             plant.grow()
             self._total_growth += 1
             print(f"{plant.name} grew 1 cm")
 
-    def height_validation(self):
-        total_height: int = 0
-
+    def height_validation(self) -> None:
+        """
+        Perform a height validation test on the garden.
+        """
+        total_height = 0
         for plant in self._plants:
             if type(plant) is Tree:
-                total_height += plant.get_height() / 5
+                total_height += plant.get_height() // 5
             elif type(plant) is Vegetable:
                 total_height += plant.get_height() * 2
             else:
                 total_height += plant.get_height()
-        if (total_height / len(self._plants) > 30):
-            print("Height validation test: True")
-        else:
-            print("Height validation test: False")
 
-    def garden_score(self):
-        score: int = 0
+        print("Height validation test:",
+              total_height / len(self._plants) > 30)
+
+    def garden_score(self) -> int:
+        """
+        Calculate and return the garden score.
+        """
+        score = 0
         for plant in self._plants:
             score += plant.get_height() + plant.get_age() * 2
             if plant.get_status() == "PrizeFlower":
                 score += 10
         return score
 
-    def get_plants(self) -> list[Plant | Flower | Tree | Vegetable]:
+    def get_plants(self):
+        """Return all plants in the garden."""
         return self._plants
 
     def get_total_growth(self) -> int:
+        """Return total growth accumulated."""
         return self._total_growth
 
 
+# ====================================================================
+
+
 class GardenManager:
-    def __init__(
-            self,
-            gardens: dict[str, Garden] = {}
-            ):
-        self._gardens: dict[str, Garden] = gardens
+    """
+    Manages multiple gardens and provides analytics.
+    """
+
+    def __init__(self, gardens: dict[str, Garden] = {}):
+        """Initialize GardenManager."""
+        self._gardens = gardens
 
     class GardenStats:
+        """
+        Utility class for garden statistics.
+        """
+
         @staticmethod
-        def display_garden_stats(garden: Garden):
-            plants_status: dict[str, int] = {
-                    "Plant": 0,
-                    "FloweringPlant": 0,
-                    "PrizeFlower": 0
-                    }
-            plants: list[Plant | Flower | Tree | Vegetable] = \
-                garden.get_plants()
+        def display_garden_stats(garden: Garden) -> None:
+            """
+            Display statistics for a given garden.
+            """
+            plants_status = {"Plant": 0, "FloweringPlant": 0, "PrizeFlower": 0}
+            plants = garden.get_plants()
+
             print(f"==== {garden.name} Report ====")
-            print("Plants in garden:")
             for plant in plants:
                 print(f"- {plant.name}: {plant.get_height()}", end="")
                 if type(plant) is Flower:
-                    print(f", {plant.color} flowers)", end="")
-                if plant.get_status() == 'FloweringPlant':
+                    print(f", {plant.color} flowers", end="")
+                if plant.get_status() == "FloweringPlant":
                     print(" (blooming)", end="")
-                if plant.get_status() == 'PrizeFlower':
+                if plant.get_status() == "PrizeFlower":
                     print(" (blooming), Prize points: 10", end="")
-                plants_status[plant.get_status()] += 2
-                print("")
+                plants_status[plant.get_status()] += 1
+                print()
 
-            print(f"\nPlants added: {len(plants)}, \
-Total growth: {garden.get_total_growth()}cm")
+            print(f"\nPlants added: {len(plants)}, "
+                  f"Total growth: {garden.get_total_growth()}cm")
 
             print(f"Plant Type: \
 {plants_status['Plant']} Regular, \
 {plants_status['FloweringPlant']} Flowering, \
 {plants_status['PrizeFlower']} Prize flower")
 
-    def add_garden(self, garden: Garden):
-        if (type(garden) is not Garden):
-            print("""
-Invalid operation attempted: Add Garden [REJECTED]
-Security: Non Garden type Garden rejected
-                  """)
-        if (garden.name in self._gardens):
-            print("""
-Invalid operation attempted: Add Garden [REJECTED]
-Security: Garden name already exist in GardenManager
-                  """)
+    def add_garden(self, garden: Garden) -> None:
+        """
+        Add a garden to the manager.
+        """
+        if type(garden) is not Garden:
+            print("Invalid garden type")
+        elif garden.name in self._gardens:
+            print("Garden already exists")
         else:
             self._gardens[garden.name] = garden
 
     @classmethod
     def create_garden_network(cls, manager: "GardenManager") -> None:
+        """
+        Generate and display network-wide garden analytics.
+        """
         gardens = manager.get_gardens()
 
-        total_gardens = len(gardens)
         total_plants = 0
         total_score = 0
-
-        best_garden_name = None
-        best_garden_score = 0
+        best_name = None
+        best_score = 0
 
         print("===== Garden Network Analytics =====")
 
-        for garden_name, garden in gardens.items():
-            plants_count = len(garden.get_plants())
-            garden_score = garden.garden_score()
+        for name, garden in gardens.items():
+            score = garden.garden_score()
+            count = len(garden.get_plants())
+            total_plants += count
+            total_score += score
+            print(f"- {name}: {count} plants, score {score}")
 
-            total_plants += plants_count
-            total_score += garden_score
-
-            print(f"- {garden_name}: "
-                  f"{plants_count} plants, score {garden_score}")
-
-            if garden_score > best_garden_score:
-                best_garden_score = garden_score
-                best_garden_name = garden_name
-
-        if total_gardens > 0:
-            avg_score = total_score // total_gardens
-        else:
-            avg_score = 0
+            if score > best_score:
+                best_score = score
+                best_name = name
 
         print("\n===== Network Summary =====")
-        print(f"Total gardens: {total_gardens}")
+        print(f"Total gardens: {len(gardens)}")
         print(f"Total plants: {total_plants}")
         print(f"Total network score: {total_score}")
-        print(f"Average garden score: {avg_score}")
+        print(f"Best garden: {best_name} ({best_score})")
 
-        if best_garden_name:
-            print(f"Best garden: {best_garden_name} "
-                  f"(score {best_garden_score})")
-
-    def compare_gardens_score(self):
-        parts = []
-
-        for garden_name, garden in self._gardens.items():
-            parts.append(f"{garden_name}: {garden.garden_score()}")
-
-        print("Garden scores - " + ", ".join(parts))
+    def compare_gardens_score(self) -> None:
+        """
+        Compare scores of all gardens.
+        """
+        print("Garden scores - " + ", ".join(
+            f"{name}: {garden.garden_score()}"
+            for name, garden in self._gardens.items()
+        ))
 
     def get_gardens(self):
+        """Return managed gardens."""
         return self._gardens
+
+
+# ====================================================================
 
 
 if __name__ == "__main__":
@@ -421,9 +414,9 @@ if __name__ == "__main__":
     garden_manager._gardens["Alice's Garden"].add_plant(
             Tree("Oak", 100, 150, "Plant", 20))
     garden_manager._gardens["Alice's Garden"].add_plant(
-            Flower("Rose", 21, 30, "Plant", "red"))
+            Flower("Rose", 21, 30, "FloweringPlant", "red"))
     garden_manager._gardens["Alice's Garden"].add_plant(
-            Flower("Sunflower", 50, 25, "Plant", "yellow"))
+            Flower("Sunflower", 50, 25, "PrizeFlower", "yellow"))
     print()
     garden_manager._gardens["Alice's Garden"].garden_growth()
 
