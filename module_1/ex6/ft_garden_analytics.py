@@ -291,7 +291,12 @@ class Garden:
             print("Height validation test: False")
 
     def garden_score(self):
-        pass
+        score: int = 0
+        for plant in self._plants:
+            score += plant.get_height() + plant.get_age() * 2
+            if plant.get_status() == "PrizeFlower":
+                score += 10
+        return score
 
     def get_plants(self) -> list[Plant | Flower | Tree | Vegetable]:
         return self._plants
@@ -352,6 +357,56 @@ Security: Garden name already exist in GardenManager
         else:
             self._gardens[garden.name] = garden
 
+    @classmethod
+    def create_garden_network(cls, manager: "GardenManager") -> None:
+        gardens = manager.get_gardens()
+
+        total_gardens = len(gardens)
+        total_plants = 0
+        total_score = 0
+
+        best_garden_name = None
+        best_garden_score = 0
+
+        print("===== Garden Network Analytics =====")
+
+        for garden_name, garden in gardens.items():
+            plants_count = len(garden.get_plants())
+            garden_score = garden.garden_score()
+
+            total_plants += plants_count
+            total_score += garden_score
+
+            print(f"- {garden_name}: "
+                  f"{plants_count} plants, score {garden_score}")
+
+            if garden_score > best_garden_score:
+                best_garden_score = garden_score
+                best_garden_name = garden_name
+
+        if total_gardens > 0:
+            avg_score = total_score // total_gardens
+        else:
+            avg_score = 0
+
+        print("\n===== Network Summary =====")
+        print(f"Total gardens: {total_gardens}")
+        print(f"Total plants: {total_plants}")
+        print(f"Total network score: {total_score}")
+        print(f"Average garden score: {avg_score}")
+
+        if best_garden_name:
+            print(f"Best garden: {best_garden_name} "
+                  f"(score {best_garden_score})")
+
+    def compare_gardens_score(self):
+        parts = []
+
+        for garden_name, garden in self._gardens.items():
+            parts.append(f"{garden_name}: {garden.garden_score()}")
+
+        print("Garden scores - " + ", ".join(parts))
+
     def get_gardens(self):
         return self._gardens
 
@@ -360,7 +415,9 @@ if __name__ == "__main__":
     print("=== Garden Management System Demo ===", end="\n\n")
     garden_manager: GardenManager = GardenManager(
             {"Alice's Garden": Garden("Alice's Garden", "Alice"),
-             "Theo's Garden": Garden("Theo's Garden", "Theo")})
+             "Theo's Garden": Garden("Theo's Garden", "Theo", [
+                 Flower("Rose", 21, 30, "Plant", "red")
+                 ])})
     garden_manager._gardens["Alice's Garden"].add_plant(
             Tree("Oak", 100, 150, "Plant", 20))
     garden_manager._gardens["Alice's Garden"].add_plant(
@@ -376,4 +433,5 @@ if __name__ == "__main__":
 
     print()
     garden_manager._gardens["Alice's Garden"].height_validation()
+    garden_manager.compare_gardens_score()
     print(f"Total Garden managed: {len(garden_manager.get_gardens())}")
