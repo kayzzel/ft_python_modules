@@ -18,20 +18,20 @@ class Plant:
             days_old (int): Age of the plant in days.
         """
         self.name: str = name
-        self._height: int = height
-        self._days_old: int = days_old
+        self.__height: int = height
+        self.__days_old: int = days_old
 
     def age(self) -> None:
         """
         Increase the age of the plant by one day.
         """
-        self._days_old += 1
+        self.__days_old += 1
 
     def grow(self) -> None:
         """
         Increase the height of the plant by one centimeter.
         """
-        self._height += 1
+        self.__height += 1
 
     def set_height(self, height: int) -> None:
         """
@@ -54,8 +54,8 @@ Invalid operation attempted: height {height}cm [REJECTED]
 Security: Negative height rejected
                   """)
         else:
-            self._height = height
-            print(f"Height updated: {self._height}cm [OK]")
+            self.__height = height
+            print(f"Height updated: {self.__height}cm [OK]")
 
     def set_age(self, age: int) -> None:
         """
@@ -78,8 +78,8 @@ Invalid operation attempted: age {age}cm [REJECTED]
 Security: Negative age rejected
                   """)
         else:
-            self._days_old = age
-            print(f"Height updated: {self._days_old} days [OK]")
+            self.__days_old = age
+            print(f"Height updated: {self.__days_old} days [OK]")
 
     def get_height(self) -> int:
         """
@@ -88,7 +88,7 @@ Security: Negative age rejected
         Returns:
             int: Height of the plant in centimeters.
         """
-        return self._height
+        return self.__height
 
     def get_age(self) -> int:
         """
@@ -97,13 +97,13 @@ Security: Negative age rejected
         Returns:
             int: Age of the plant in days.
         """
-        return self._days_old
+        return self.__days_old
 
     def get_info(self) -> None:
         """
         Print the plant's name, height, and age.
         """
-        print(f"{self.name} : {self._height}cm, {self._days_old} days old")
+        print(f"{self.name} : {self.__height}cm, {self.__days_old} days old")
 
 
 class Flower(Plant):
@@ -148,8 +148,8 @@ class Flower(Plant):
         """
         Print detailed information about the flower.
         """
-        print(f"{self.name} (Flower): {self._height}cm, "
-              f"{self._days_old} days old, color : {self.color}")
+        print(f"{self.name} (Flower): {self.get_height()}cm, "
+              f"{self.get_age()} days old, color : {self.color}")
 
 
 class Tree(Plant):
@@ -180,7 +180,8 @@ class Tree(Plant):
         """
         Calculate and display the shade area produced by the tree.
         """
-        shade_area: float = self._height // 2 * self.trunk_diameter * 7 / 10000
+        shade_area: float = \
+            self.get_height() // 2 * self.trunk_diameter * 7 / 10000
         print(f"{self.name} provides {round(shade_area, 2)} "
               f"square meters of shade")
 
@@ -188,8 +189,8 @@ class Tree(Plant):
         """
         Print detailed information about the tree.
         """
-        print(f"{self.name} (Tree): {self._height}cm, "
-              f"{self._days_old} days old, {self.trunk_diameter}cm diameter")
+        print(f"{self.name} (Tree): {self.get_height()}cm, "
+              f"{self.get_age()} days old, {self.trunk_diameter}cm diameter")
 
 
 class Vegetable(Plant):
@@ -223,8 +224,8 @@ class Vegetable(Plant):
         """
         Print detailed information about the vegetable.
         """
-        print(f"{self.name} (Vegetable): {self._height}cm, "
-              f"{self._days_old} days old, {self.harvest_season} harvest")
+        print(f"{self.name} (Vegetable): {self.get_height()}cm, "
+              f"{self.get_age()} days old, {self.harvest_season} harvest")
         print(f"{self.name} is rich in {self.nutritional_value}")
 
 
