@@ -3,7 +3,7 @@ class GardenError(Exception):
     Base exception class for garden-related errors.
     """
 
-    def __init__(self, message):
+    def __init__(self, message: str) -> None:
         """
         Initialize the GardenError with a custom message.
 
@@ -18,7 +18,7 @@ class PlantError(GardenError):
     Exception raised for plant-specific errors.
     """
 
-    def __init__(self, message):
+    def __init__(self, message: str) -> None:
         """
         Initialize the PlantError with a custom message.
 
@@ -33,7 +33,7 @@ class WatterError(GardenError):
     Exception raised for watering-related errors.
     """
 
-    def __init__(self, message):
+    def __init__(self, message: str) -> None:
         """
         Initialize the WatterError with a custom message.
 
@@ -43,7 +43,7 @@ class WatterError(GardenError):
         super().__init__(message)
 
 
-def plant_watter(plant_name: str, watter: int):
+def plant_watter(plant_name: str, watter: int) -> None:
     """
     Check if a plant is wilting based on water level.
 
@@ -54,7 +54,7 @@ def plant_watter(plant_name: str, watter: int):
         raise PlantError(f"The {plant_name} plant is wilting!")
 
 
-def watter_tank(watter: int):
+def watter_tank(watter: int) -> None:
     """
     Check if the water tank has sufficient water.
 

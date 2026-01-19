@@ -29,9 +29,9 @@ def check_plant_health(
     elif water_level > 10 or water_level < 1:
         raise ValueError("Watter Level must be between 1 and 10")
     elif type(sunlight_hours) is not int:
-        raise ValueError("Sunlught Hours isn't an integer")
+        raise ValueError("Sunlight Hours isn't an integer")
     elif sunlight_hours > 12 or sunlight_hours < 2:
-        raise ValueError("Sunlught Hours must be between 2 and 12")
+        raise ValueError("Sunlight Hours must be between 2 and 12")
     else:
         print(f"{plant_name} is healthy")
 

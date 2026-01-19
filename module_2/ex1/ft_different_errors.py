@@ -1,4 +1,4 @@
-def garden_operations(error: int):
+def garden_operations(error: int) -> None:
     """
     Perform an operation that intentionally raises different exceptions.
 
@@ -12,20 +12,20 @@ def garden_operations(error: int):
             3 -> KeyError
     """
     if error == 0:
-        test = int("abc")
+        test: int = int("abc")
         print(test)
     elif error == 1:
-        test1 = 14 / 0
+        test1: float = 14 / 0
         print(test1)
     elif error == 2:
         test2 = open("abc.txt")
         print(test2)
     elif error == 3:
-        test3 = {"a": 0, "b": 0}
+        test3: dict[str, int] = {"a": 0, "b": 0}
         print(test3["c"])
 
 
-def test_error_types():
+def test_error_types() -> None:
     """
     Demonstrate handling of multiple built-in Python exception types.
 

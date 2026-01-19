@@ -3,7 +3,7 @@ class WatteringError(Exception):
         super().__init__(message)
 
 
-def water_plants(plant_list: list[str]):
+def water_plants(plant_list: list[str]) -> None:
     print("Opening watering system...")
     try:
         for plant in plant_list:
@@ -21,18 +21,18 @@ def water_plants(plant_list: list[str]):
         print("Closing watering system (cleanup)")
 
 
-def test_watering_system():
+def test_watering_system() -> None:
     """
     Test the watering system with valid and invalid plant lists.
     Demonstrates that cleanup always happens.
     """
     print("=== Test 1: Normal watering ===")
-    good_plants = ["Rose", "Tomato", "Sunflower"]
+    good_plants: list[str] = ["Rose", "Tomato", "Sunflower"]
     water_plants(good_plants)
     print("Watering completed successfully!")
 
     print("\n=== Test 2: Watering with an error ===")
-    bad_plants = ["Rose", 42, "Sunflower"]
+    bad_plants: list[str] = ["Rose", 42, "Sunflower"]
     water_plants(bad_plants)
 
 
