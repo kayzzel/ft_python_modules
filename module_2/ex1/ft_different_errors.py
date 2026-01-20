@@ -12,15 +12,19 @@ def garden_operations(error: int) -> None:
             3 -> KeyError
     """
     if error == 0:
+        print("Testing ValueError...")
         test: int = int("abc")
         print(test)
     elif error == 1:
+        print("Testing ZeroDivisionError...")
         test1: float = 14 / 0
         print(test1)
     elif error == 2:
-        test2 = open("abc.txt")
+        print("Testing FileNotFoundError...")
+        test2 = open("missing.txt")
         print(test2)
     elif error == 3:
+        print("Testing KeyError...")
         test3: dict[str, int] = {"a": 0, "b": 0}
         print(test3["c"])
 
@@ -36,34 +40,14 @@ def test_error_types() -> None:
     print("=== Garden Error Types Demo ===")
 
     print()
-    print("Testing ValueError...")
-    try:
-        garden_operations(0)
-    except ValueError as err:
-        print(f"ValueError Error: {err}")
+    for error in range(4):
+        try:
+            garden_operations(error)
+        except (ValueError, FileNotFoundError, ZeroDivisionError, KeyError) \
+                as err:
+            print(f"{err.__class__.__name__} Error: {err}")
+        print()
 
-    print()
-    print("Testing ZeroDivisionError...")
-    try:
-        garden_operations(1)
-    except ZeroDivisionError as err:
-        print(f"ZeroDivisionError Error: {err}")
-
-    print()
-    print("Testing FileNotFoundError...")
-    try:
-        garden_operations(2)
-    except FileNotFoundError as err:
-        print(f"FileNotFoundError Error: {err}")
-
-    print()
-    print("Testing KeyError...")
-    try:
-        garden_operations(3)
-    except KeyError as err:
-        print(f"KeyError Error: {err}")
-
-    print()
     print("Testing multiple errors together...")
 
     print()
