@@ -72,8 +72,8 @@ def print_inventory(inventory: dict[str, int]) -> None:
         total_item += quantity
 
     for item, quantity in inventory.items():
-        percentage: float = round(quantity / total_item * 100, 1)
-        print(f"{item}: {quantity} units ({percentage}%)")
+        percentage: float = quantity / total_item * 100
+        print(f"{item}: {quantity} units ({percentage:.2f}%)")
 
 
 def inventory_stat(inventory: dict[str, int]) -> None:
