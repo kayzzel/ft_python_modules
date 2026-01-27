@@ -87,22 +87,25 @@ def inventory_stat(inventory: dict[str, int]) -> None:
         None
     """
     first: bool = True
+    abundance: dict[str, dict[str, int | str]] = {}
 
     print("=== Inventory Statistics ===")
 
     for item, quantity in inventory.items():
         if first:
-            most: str = item
-            least: str = item
+            abundance["most"] = dict(name=item, quantity=quantity)
+            abundance["least"] = dict(name=item, quantity=quantity)
             first = False
         else:
-            if quantity > inventory[most]:
-                most = item
-            if quantity < inventory[least]:
-                least = item
+            if quantity > int(abundance["most"]["quantity"]):
+                abundance["most"] = dict(name=item, quantity=quantity)
+            if quantity < int(abundance["least"]["quantity"]):
+                abundance["least"] = dict(name=item, quantity=quantity)
 
-    print(f"Most abundant: {most} ({inventory[most]} units)")
-    print(f"Least abundant: {least} ({inventory[least]} units)")
+    print(f"Most abundant: {abundance['most']['name']} \
+({abundance['most']['quantity']} units)")
+    print(f"Least abundant: {abundance['least']['name']} \
+({abundance['least']['quantity']} units)")
 
 
 def item_categories(inventory: dict[str, int]) -> None:
