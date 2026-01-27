@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class Plant:
     """
     Represents a plant with a name, height, and age in days.
@@ -233,23 +235,29 @@ if __name__ == "__main__":
     print("==== Garden Plant Type ====")
 
     print()
+    print("=== Flowers ===")
     flower: Flower = Flower()
     flower.get_info()
     flower.bloom()
+    print()
     flower2: Flower = Flower("Lycoris radiata", 25, 30, "red")
     flower2.get_info()
     flower2.bloom()
 
     print()
+    print("=== Trees ===")
     tree: Tree = Tree()
     tree.get_info()
     tree.produce_shade()
+    print()
     tree2: Tree = Tree("Birch", 50, 60, 10)
     tree2.get_info()
     tree2.produce_shade()
 
     print()
+    print("=== Vegetables ===")
     vegetable: Vegetable = Vegetable()
     vegetable.get_info()
+    print()
     vegetable2: Vegetable = Vegetable("Carrot", 20, 60, "spring", "calcium")
     vegetable2.get_info()

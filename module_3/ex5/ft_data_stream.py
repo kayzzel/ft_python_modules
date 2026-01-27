@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from typing import Generator
 from time import perf_counter
 from random import randint

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def crisis_response() -> None:
     """
     Simulate a crisis response system by handling multiple file access scenario

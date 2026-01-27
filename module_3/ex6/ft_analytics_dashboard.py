@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class Player:
     """
     Represents a player with name, score, active region, and achievements.

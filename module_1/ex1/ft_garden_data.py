@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class Plant:
     """
     Represents a plant with a name, height, and age in days.
@@ -23,11 +25,11 @@ class Plant:
 
 
 if __name__ == "__main__":
-    plant: Plant = Plant()
-    print(f"""
-=== Welcome to My Garden ===
-Plant: {plant.name}
-Height: {plant.height}cm
-Age: {plant.days_old} days
-=== End of Program ===
-          """)
+    plants: list[Plant] = [
+            Plant(),
+            Plant("Rose", 25, 30),
+            Plant("Cactus", 15, 120)
+            ]
+    print("=== Welcome to My Garden ===")
+    for plant in plants:
+        print(f"{plant.name}: {plant.height}cm, {plant.days_old} days old")

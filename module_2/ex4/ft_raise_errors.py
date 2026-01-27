@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def check_plant_health(
         plant_name: str,
         water_level: int,

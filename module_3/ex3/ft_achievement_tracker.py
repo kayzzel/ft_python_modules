@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def display_players_achivements(players: dict[str, set[str]]) -> None:
     """
     Display each player's achievements.

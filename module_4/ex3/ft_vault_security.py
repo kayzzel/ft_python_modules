@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def secure_extraction(file_name: str, content: str) -> None:
     """
     Open a file in append-plus mode to securely read its current contents
