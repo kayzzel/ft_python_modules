@@ -1,0 +1,9 @@
+# Global Variables
+__version__: str = "1.0.0"
+__author__: str = "Master Pythonicus"
+__all__: list[str] = ["lead_to_gold", "stone_to_gem",
+                      "philosophers_stone", "elixir_of_life"]
+
+# Imports
+from .basic import lead_to_gold, stone_to_gem
+from .advanced import philosophers_stone, elixir_of_life
