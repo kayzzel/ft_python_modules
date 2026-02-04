@@ -5,24 +5,6 @@ from typing import List
 
 
 def score_analytics() -> None:
-    """
-    Analyze and display basic statistics for player scores.
-
-    Reads integer scores from command line arguments and prints:
-      - list of scores
-      - number of players
-      - total score
-      - average score
-      - highest score
-      - lowest score
-      - score range
-
-    If no scores are provided, it prints usage instructions.
-    If a non-integer argument is found, it prints an error.
-
-    Returns:
-        None
-    """
     print("=== Player Score Analytics ===")
 
     args: List[str] = sys.argv

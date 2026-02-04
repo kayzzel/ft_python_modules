@@ -4,16 +4,6 @@ import sys
 
 
 def pars_inventory() -> dict[str, int]:
-    """
-    Parse inventory items from command-line arguments.
-
-    Expected argument format:
-        item:quantity
-
-    Returns:
-        dict[str, int]: Dictionary mapping item names to quantities.
-        Returns an empty dictionary if parsing fails or no items are provided.
-    """
     args: list[str] = sys.argv
     inventory: dict[str, int] = {}
 
@@ -34,15 +24,6 @@ def pars_inventory() -> dict[str, int]:
 
 
 def total_item_inventory(inventory: dict[str, int]) -> None:
-    """
-    Display total and unique item counts in the inventory.
-
-    Args:
-        inventory (dict[str, int]): Inventory dictionary.
-
-    Returns:
-        None
-    """
     total_item: int = 0
     unique_item: int = 0
 
@@ -57,15 +38,6 @@ def total_item_inventory(inventory: dict[str, int]) -> None:
 
 
 def print_inventory(inventory: dict[str, int]) -> None:
-    """
-    Print inventory contents with percentage distribution.
-
-    Args:
-        inventory (dict[str, int]): Inventory dictionary.
-
-    Returns:
-        None
-    """
     total_item: int = 0
 
     print("=== Current Inventory ===")
@@ -79,15 +51,6 @@ def print_inventory(inventory: dict[str, int]) -> None:
 
 
 def inventory_stat(inventory: dict[str, int]) -> None:
-    """
-    Display inventory statistics including most and least abundant items.
-
-    Args:
-        inventory (dict[str, int]): Inventory dictionary.
-
-    Returns:
-        None
-    """
     first: bool = True
     abundance: dict[str, dict[str, int | str]] = {}
 
@@ -111,45 +74,21 @@ def inventory_stat(inventory: dict[str, int]) -> None:
 
 
 def item_categories(inventory: dict[str, int]) -> None:
-    """
-    Categorize inventory items into moderate and scarce groups.
-
-    Moderate items have more than 4 units.
-    Scarce items have 4 or fewer units.
-
-    Args:
-        inventory (dict[str, int]): Inventory dictionary.
-
-    Returns:
-        None
-    """
-    moderate: dict[str, int] = {}
-    scarce: dict[str, int] = {}
+    catergories: dict[str, dict[str, int]] = {"moderate": {}, "scarce": {}}
 
     print("=== Item Categories ===")
 
     for item, quantity in inventory.items():
         if quantity > 4:
-            moderate[item] = quantity
+            catergories["moderate"][item] = quantity
         else:
-            scarce[item] = quantity
+            catergories["scarce"][item] = quantity
 
-    print(f"Moderate: {moderate}")
-    print(f"Scarce: {scarce}")
+    print(f"Moderate: {catergories['moderate']}")
+    print(f"Scarce: {catergories['scarce']}")
 
 
 def management_suggestions(inventory: dict[str, int]) -> None:
-    """
-    Display restocking suggestions based on inventory levels.
-
-    Items with fewer than 2 units are marked for restocking.
-
-    Args:
-        inventory (dict[str, int]): Inventory dictionary.
-
-    Returns:
-        None
-    """
     to_restock: list[str] = []
 
     print("=== Management Suggestions ===")
@@ -162,21 +101,6 @@ def management_suggestions(inventory: dict[str, int]) -> None:
 
 
 def dict_propriety(dictionary: dict[str, int], search: str) -> None:
-    """
-    Display dictionary properties and test key existence.
-
-    Prints:
-      - list of keys
-      - list of values
-      - whether a given key exists
-
-    Args:
-        dictionary (dict[str, int]): Dictionary to analyze.
-        search (str): Key to search for.
-
-    Returns:
-        None
-    """
     keys: list[str] = []
     values: list[int] = []
     search_in_dict: bool = True
@@ -197,8 +121,7 @@ def dict_propriety(dictionary: dict[str, int], search: str) -> None:
     print(f"Sample lookup - '{search}' in inventory: {search_in_dict}")
 
 
-if __name__ == "__main__":
-
+def main() -> None:
     inventory: dict[str, int] = pars_inventory()
     if (len(inventory) > 0):
         total_item_inventory(inventory)
@@ -217,3 +140,7 @@ if __name__ == "__main__":
 
         print()
         dict_propriety(inventory, "sword")
+
+
+if __name__ == "__main__":
+    main()

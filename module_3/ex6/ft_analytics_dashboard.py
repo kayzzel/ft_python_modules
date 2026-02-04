@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
 class Player:
-    """
-    Represents a player with name, score, active region, and achievements.
-    """
-
     def __init__(
         self,
         name: str,
@@ -12,15 +8,6 @@ class Player:
         active_region: str,
         achievements: set[str]
     ) -> None:
-        """
-        Initialize a Player instance.
-
-        Args:
-            name (str): Player name.
-            score (int): Player score.
-            active_region (str): Player active region.
-            achievements (set[str]): Set of player achievements.
-        """
         self.name: str = name
         self.score: int = score
         self.active_region: str = active_region
@@ -28,15 +15,6 @@ class Player:
 
 
 def list_comprehension(players: list[Player]) -> None:
-    """
-    Demonstrate list comprehension-like operations using loops.
-
-    Args:
-        players (list[Player]): List of Player objects.
-
-    Returns:
-        None
-    """
     hight_scorer: list[str] = []
     doubled_score: list[int] = []
     active_player: list[str] = []
@@ -55,15 +33,6 @@ def list_comprehension(players: list[Player]) -> None:
 
 
 def dict_comprehension(players: list[Player]) -> None:
-    """
-    Demonstrate dictionary comprehension-like operations using loops.
-
-    Args:
-        players (list[Player]): List of Player objects.
-
-    Returns:
-        None
-    """
     player_score: dict[str, int] = {}
     achivement_count: dict[str, int] = {}
 
@@ -78,15 +47,6 @@ def dict_comprehension(players: list[Player]) -> None:
 
 
 def set_comprehension(players: list[Player]) -> None:
-    """
-    Demonstrate set comprehension-like operations using loops.
-
-    Args:
-        players (list[Player]): List of Player objects.
-
-    Returns:
-        None
-    """
     player_name: set[str] = set()
     active_region: set[str] = set()
     all_a: set[str] = set()
@@ -106,27 +66,17 @@ def set_comprehension(players: list[Player]) -> None:
 
 
 def combine_analytics(players: list[Player]) -> None:
-    """
-    Combine multiple analytics into one output.
-
-    Args:
-        players (list[Player]): List of Player objects.
-
-    Returns:
-        None
-    """
     print(f"Total players: {len(players)}")
     print(f"Total unique achievements: \
 {len({ach for player in players for ach in player.achievements})}")
     print(f"Average score: \
-{sum([player.score for player in players]) / len(players)}")
+{sum([player.score for player in players]) / len(players):.1f}")
     print(f"Top performer: \
 {(best:=max(players, key=lambda p: p.score)).name}  \
 ({best.score} points, {len(best.achievements)} achievements)")
 
 
-if __name__ == "__main__":
-
+def main() -> None:
     players: list[Player] = [
             Player("alice", 2300, "north",
                    set(
@@ -162,3 +112,7 @@ if __name__ == "__main__":
 
     print()
     combine_analytics(players)
+
+
+if __name__ == "__main__":
+    main()
