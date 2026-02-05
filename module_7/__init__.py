@@ -3,5 +3,4 @@ __all__: list[str] = ["Card", "CreatureCard"]
 
 
 # Imports
-from .Card import Card
-from .CreatureCard import CreatureCard
+from .ex0 import Card, CreatureCard

@@ -5,92 +5,6 @@ from typing import Protocol, Any, Union, List, Dict
 import time
 
 
-class ProcessingPipeline(ABC):
-    def __init__(self, pipeline_id: str) -> None:
-        self.pipeline_id: str = pipeline_id
-        self.stages: List[InputStage | TransformStage | OutputStage] = []
-
-    @abstractmethod
-    def process(self, data: Any) -> Union[str, Any]:
-        pass
-
-    def add_stage(self,
-                  stages: List[InputStage | TransformStage | OutputStage]
-                  ) -> None:
-        for stage in stages:
-            if (stage.__class__.__name__ in [stage.__class__.__name__
-                                             for stage in self.stages]):
-                print(f"{stage.__class__.__name__} already added, skipping")
-            else:
-                self.stages.append(stage)
-
-
-class JSONAdapter(ProcessingPipeline):
-    def __init__(self, pipeline_id: str) -> None:
-        super().__init__(pipeline_id)
-
-    def process(self, data: Any) -> Union[str, Any]:
-        try:
-            for d in data:
-                if (isinstance(d, dict)):
-                    data = d
-                    print(f"Input: {data}")
-                    if (len(self.stages) == 0):
-                        raise Exception("Error JSONAdapter: no stages given")
-                    for stage in self.stages:
-                        data = stage.process(data)
-                    return data
-
-            raise Exception("Error JSONAdapter: no valide data type found")
-        except (Exception, AttributeError) as err:
-            print(err)
-            return None
-
-
-class CSVAdapter(ProcessingPipeline):
-    def __init__(self, pipeline_id: str) -> None:
-        super().__init__(pipeline_id)
-
-    def process(self, data: Any) -> Union[str, Any]:
-        try:
-            for d in data:
-                if (isinstance(d, str)):
-                    data = d
-                    print(f"Input: {data}")
-                    if (len(self.stages) <= 0):
-                        raise Exception("Error CSVAdapter: no stages given")
-                    for stage in self.stages:
-                        data = stage.process(data)
-                    return data
-
-            raise Exception("Error CSVAdapter: no valide data type found")
-        except (Exception, AttributeError) as err:
-            print(err)
-            return None
-
-
-class StreamAdapter(ProcessingPipeline):
-    def __init__(self, pipeline_id: str) -> None:
-        super().__init__(pipeline_id)
-
-    def process(self, data: Any) -> Union[str, Any]:
-        try:
-            for d in data:
-                if (isinstance(d, list)):
-                    data = d
-                    print(f"Input: {data}")
-                    if (len(self.stages) <= 0):
-                        raise Exception("Error StreamAdapter: no stages given")
-                    for stage in self.stages:
-                        data = stage.process(data)
-                    return data
-
-            raise Exception("Error StreamAdapter: no valide data type found")
-        except (Exception, AttributeError) as err:
-            print(err)
-            return None
-
-
 class ProcessingStage(Protocol):
     def process(self, data: Any) -> Any:
         pass
@@ -198,6 +112,94 @@ class OutputFormatStage():
         if (data is None):
             return data
         return data.upper()
+
+
+class ProcessingPipeline(ABC):
+    def __init__(self, pipeline_id: str) -> None:
+        self.pipeline_id: str = pipeline_id
+        self.stages: List[InputStage | TransformStage | OutputStage] = []
+
+    @abstractmethod
+    def process(self, data: Any) -> Union[str, Any]:
+        pass
+
+    def add_stage(self,
+                  stages: List[InputStage | TransformStage | OutputStage]
+                  ) -> None:
+        for stage in stages:
+            if (stage.__class__.__name__ in [stage.__class__.__name__
+                                             for stage in self.stages]):
+                print(f"{stage.__class__.__name__} already added, skipping")
+            else:
+                self.stages.append(stage)
+
+
+class JSONAdapter(ProcessingPipeline):
+    def __init__(self, pipeline_id: str) -> None:
+        super().__init__(pipeline_id)
+
+    def process(self, data: Any) -> Union[str, Any]:
+        try:
+            for d in data:
+                if (isinstance(d, dict)):
+                    data = d
+                    print(f"Input: {data}")
+                    if (len(self.stages) == 0):
+                        raise Exception("Error JSONAdapter: no stages given")
+                    for stage in self.stages:
+                        data = stage.process(data)
+                    return data
+
+            raise Exception("Error JSONAdapter: no valide data type found")
+        except (Exception, AttributeError) as err:
+            print(err)
+            return None
+
+
+class CSVAdapter(ProcessingPipeline):
+    def __init__(self, pipeline_id: str) -> None:
+        super().__init__(pipeline_id)
+
+    def process(self, data: Any) -> Union[str, Any]:
+        try:
+            for d in data:
+                if (isinstance(d, str)):
+                    data = d
+                    print(f"Input: {data}")
+                    if (len(self.stages) <= 0):
+                        raise Exception("Error CSVAdapter: no stages given")
+                    for stage in self.stages:
+                        data = stage.process(data)
+                    return data
+
+            raise Exception("Error CSVAdapter: no valide data type found")
+        except (Exception, AttributeError) as err:
+            print(err)
+            return None
+
+
+class StreamAdapter(ProcessingPipeline):
+    def __init__(self, pipeline_id: str) -> None:
+        super().__init__(pipeline_id)
+
+    def process(self, data: Any) -> Union[str, Any]:
+        try:
+            for d in data:
+                if (isinstance(d, list)):
+                    data = d
+                    print(f"Input: {data}")
+                    if (len(self.stages) <= 0):
+                        raise Exception("Error StreamAdapter: no stages given")
+                    for stage in self.stages:
+                        data = stage.process(data)
+                    return data
+
+            raise Exception("Error StreamAdapter: no valide data type found")
+        except (Exception, AttributeError) as err:
+            print(err)
+            return None
+
+
 
 
 class NexusManager():
