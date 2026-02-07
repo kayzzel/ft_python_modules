@@ -4,17 +4,6 @@ import sys
 
 
 def stream_management() -> None:
-    """
-    Handle a three-channel communication stream using standard input,
-    standard output, and standard error.
-
-    The function prompts the user for an archivist ID and a status report.
-    Messages are printed to different output streams to simulate a
-    communication system diagnostic.
-
-    Returns:
-        None
-    """
     print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===", file=sys.stdout)
 
     print()
