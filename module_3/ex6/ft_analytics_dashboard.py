@@ -72,7 +72,7 @@ def combine_analytics(players: list[Player]) -> None:
     print(f"Average score: \
 {sum([player.score for player in players]) / len(players):.1f}")
     print(f"Top performer: \
-{(best:=max(players, key=lambda p: p.score)).name}  \
+{(best := max(players, key=lambda p: p.score)).name}  \
 ({best.score} points, {len(best.achievements)} achievements)")
 
 

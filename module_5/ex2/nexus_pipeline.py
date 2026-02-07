@@ -200,8 +200,6 @@ class StreamAdapter(ProcessingPipeline):
             return None
 
 
-
-
 class NexusManager():
     def __init__(self):
         self.piplines = []
