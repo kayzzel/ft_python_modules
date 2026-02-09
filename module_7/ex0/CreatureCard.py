@@ -10,7 +10,7 @@ class CreatureCard(Card):
             rarity: str,
             attack: int,
             health: int
-            ):
+            ) -> None:
         super().__init__(name, cost, rarity)
         self.attack: int = attack
         self.health: int = health
