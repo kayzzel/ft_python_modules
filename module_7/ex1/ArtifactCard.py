@@ -1,7 +1,7 @@
 from . import Card
 
 
-class ArtifactClass(Card):
+class ArtifactCard(Card):
     def __init__(
             self,
             name: str,
@@ -17,7 +17,7 @@ class ArtifactClass(Card):
 
     def play(self, game_state: dict) -> dict:
         if self.played:
-            print(f"Spell {self.name} already consumed")
+            print(f"Spell {self.name} already played")
         elif not self.is_playable(game_state["available_mana"]):
             print(f"Not enougth mana to play {self.name} need at least\
 {self.cost} mana")
