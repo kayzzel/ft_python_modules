@@ -5,21 +5,7 @@ from typing import Any, List, Dict, Optional, Union
 
 
 class DataStream(ABC):
-    """
-    Abstract base class for data streams.
-
-    Defines a common interface for processing batches of data
-    and retrieving stream statistics.
-    """
-
     def __init__(self, stream_id: str, stream_type: str) -> None:
-        """
-        Initialize a data stream.
-
-        Args:
-            stream_id (str): Unique identifier for the stream.
-            stream_type (str): Human-readable stream type.
-        """
         self.stream_id: str = stream_id
         self.stream_type: str = stream_type
         self.processed: int | float = 0
@@ -27,46 +13,14 @@ class DataStream(ABC):
 
     @abstractmethod
     def process_batch(self, data_batch: List[Any]) -> str:
-        """
-        Process a batch of incoming data.
-
-        Args:
-            data_batch (List[Any]): Batch of raw data items.
-
-        Returns:
-            str: Human-readable processing result.
-        """
-        pass
+        ...
 
     def filter_data(
         self,
         data_batch: List[Any],
         criteria: Optional[str] = None
     ) -> List[Any]:
-        """
-        Filter incoming data based on a key and numeric value.
-
-        Supports string entries formatted as 'key: value'
-        and dictionary entries with numeric values.
-
-        Args:
-            data_batch (List[Any]): Incoming data batch.
-            criteria (Optional[str]): Filtering key.
-
-        Returns:
-            List[Any]: Filtered data matching the criteria.
-        """
-
         def is_float(value: str) -> bool:
-            """
-            Check whether a string value can be converted to float.
-
-            Args:
-                value (str): Value to test.
-
-            Returns:
-                bool: True if convertible to float, False otherwise.
-            """
             try:
                 float(value)
                 return True
@@ -89,13 +43,6 @@ class DataStream(ABC):
         return filtered_data
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
-        """
-        Retrieve stream statistics.
-
-        Returns:
-            Dict[str, Union[str, int, float]]: Stream metadata and
-            number of processed items.
-        """
         return {
             "stream_id": self.stream_id,
             "type": self.stream_type,
@@ -104,34 +51,11 @@ class DataStream(ABC):
 
 
 class SensorStream(DataStream):
-    """
-    Stream processor for environmental sensor data.
-
-    Handles temperature, humidity, and pressure readings.
-    """
-
     def __init__(self, stream_id: str) -> None:
-        """
-        Initialize a SensorStream.
-
-        Args:
-            stream_id (str): Unique stream identifier.
-        """
         print("Initializing Sensor Stream...")
         super().__init__(stream_id, "Environmental Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        """
-        Process a batch of sensor readings.
-
-        Computes average temperature and counts processed readings.
-
-        Args:
-            data_batch (List[Any]): Raw sensor data.
-
-        Returns:
-            str: Sensor processing summary or error message.
-        """
         try:
             temp: List[str] = self.filter_data(data_batch, "temp")
             humidity: List[str] = self.filter_data(data_batch, "humidity")
@@ -158,34 +82,12 @@ class SensorStream(DataStream):
 
 
 class TransactionStream(DataStream):
-    """
-    Stream processor for financial transaction data.
-
-    Handles buy and sell operations and computes net flow.
-    """
 
     def __init__(self, stream_id: str) -> None:
-        """
-        Initialize a TransactionStream.
-
-        Args:
-            stream_id (str): Unique stream identifier.
-        """
         print("Initializing Transaction Stream...")
         super().__init__(stream_id, "Financial Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        """
-        Process a batch of transaction data.
-
-        Calculates net flow from buy and sell operations.
-
-        Args:
-            data_batch (List[Any]): Raw transaction data.
-
-        Returns:
-            str: Transaction processing summary or error message.
-        """
         try:
             buy: List[str] = self.filter_data(data_batch, "buy")
             sell: List[str] = self.filter_data(data_batch, "sell")
@@ -217,19 +119,7 @@ class TransactionStream(DataStream):
 
 
 class EventStream(DataStream):
-    """
-    Stream processor for system event data.
-
-    Extracts events and detects error-related occurrences.
-    """
-
     def __init__(self, stream_id: str) -> None:
-        """
-        Initialize an EventStream.
-
-        Args:
-            stream_id (str): Unique stream identifier.
-        """
         print("Initializing Event Stream...")
         super().__init__(stream_id, "System Events")
 
@@ -238,16 +128,6 @@ class EventStream(DataStream):
         data_batch: List[Any],
         criteria: Optional[str] = None
     ) -> List[Any]:
-        """
-        Filter event data without numeric validation.
-
-        Args:
-            data_batch (List[Any]): Raw event data.
-            criteria (Optional[str]): Event key.
-
-        Returns:
-            List[Any]: Filtered event entries.
-        """
         if criteria is None:
             return data_batch
 
@@ -263,17 +143,6 @@ class EventStream(DataStream):
         return filtered_data
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        """
-        Process a batch of system events.
-
-        Detects total events and error-related events.
-
-        Args:
-            data_batch (List[Any]): Raw event data.
-
-        Returns:
-            str: Event processing summary or error message.
-        """
         try:
             events: List[str] = self.filter_data(data_batch, "event")
             events = [event.split(": ")[1] for event in events]
@@ -293,26 +162,10 @@ class EventStream(DataStream):
 
 
 class StreamProcessor:
-    """
-    High-level orchestrator for processing multiple stream types.
-
-    Coordinates sensor, transaction, and event streams
-    using a unified processing interface.
-    """
-
     def __init__(self) -> None:
-        """
-        Initialize the StreamProcessor.
-        """
         self.batch_number: int = 0
 
     def process_streams(self, batches: List[Any]) -> None:
-        """
-        Process a batch of mixed data through all stream types.
-
-        Args:
-            batches (List[Any]): Mixed input data batch.
-        """
         self.batch_number += 1
 
         sensor: SensorStream = SensorStream(
@@ -356,7 +209,7 @@ operations processed\n"
         print("All streams processed successfully. Nexus throughput optimal.")
 
 
-if __name__ == "__main__":
+def main() -> None:
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
     print()
 
@@ -374,3 +227,7 @@ if __name__ == "__main__":
 
     processor = StreamProcessor()
     processor.process_streams(batches)
+
+
+if __name__ == "__main__":
+    main()
