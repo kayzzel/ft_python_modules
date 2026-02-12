@@ -106,12 +106,13 @@ class OutputStage():
             data = data["data"]
             return f"Stream summary: \
 {len(data)} readings, avg: {round(sum(data.values()) / len(data), 2)}°C"
+        return "An Error occured, output can't be generated"
 
 
 class OutputFormatStage():
     def process(self, data: Any) -> str:
         if (data is None):
-            return data
+            return "An Error occured, output can't be generated"
         return data.upper()
 
 

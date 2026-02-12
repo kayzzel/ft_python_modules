@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from . import Card
 from typing_extensions import override
 
@@ -14,7 +16,7 @@ class CreatureCard(Card):
         super().__init__(name, cost, rarity)
         self.attack: int = attack
         self.health: int = health
-        self.played: bool = False
+        self.__played: bool = False
 
     @property
     def attack(self) -> int:
@@ -37,10 +39,16 @@ class CreatureCard(Card):
     def health(self, health: int) -> None:
         if not isinstance(health, int):
             raise ValueError(f"{health} is not an integer")
-        elif not isinstance(health, int):
-            raise ValueError(f"{health} is not an positive number")
         else:
             self.__health = health
+
+    @property
+    def played(self) -> bool:
+        return self.__played
+
+    @played.setter
+    def played(self, played: bool) -> None:
+        raise ValueError("Can't change played from the outside")
 
     @override
     def get_card_info(self) -> dict:
@@ -62,7 +70,7 @@ class CreatureCard(Card):
             print(f"Available mana: {game_state['available_mana']}")
         else:
             game_state["available_mana"] -= self.cost
-            self.played = True
+            self.__played = True
             return {
                 "card_played": self.name,
                 "mana_used": self.cost,
