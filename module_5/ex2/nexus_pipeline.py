@@ -57,38 +57,39 @@ class TransformStage():
     def process(self, data: Any) -> Dict:
         if (isinstance(data, dict)):
             try:
-                return ["Sensor_data", data]
+                return {"data_type": "Sensor_data", "data": data}
             except Exception:
                 print("Error S2: invalid data forma")
-                return None
+                return {}
 
         if (isinstance(data, str)):
             try:
-                return ["Log_data", {key: value for key, value
+                return {"data_type": "Log_data",
+                        "data": {key: value for key, value
                                      in zip(["user", "action", "timestamp"],
-                                            data.split(","))}]
+                                            data.split(","))}}
             except Exception:
                 print("Error S2: invalid data forma")
-                return None
+                return {}
 
         if (isinstance(data, list)):
             try:
-                return ["measure_data",
-                        {"temp_" + str(i): data[i] for i in range(0, len(data))
-                         }]
+                return {"data_type":  "measure_data",
+                        "data": {"temp_" + str(i): data[i]
+                                 for i in range(0, len(data))}}
             except Exception as err:
                 print(err)
-                return None
+                return {}
         return data
 
 
 class OutputStage():
     def process(self, data: Any) -> str:
-        if data is None:
+        if data is None or data == {}:
             return "An Error occured, output can't be generated"
 
-        if data[0] == "Sensor_data":
-            data = data[1]
+        if data["data_type"] == "Sensor_data":
+            data = data["data"]
             if data["sensor"] == "temp":
                 return f"Processed temperatur reading: \
 {data['value']} {data['unit']} (Normal Range)"
@@ -96,13 +97,13 @@ class OutputStage():
                 return f"Processed humidity reading: \
 {data['value']} {data['unit']} (Normal Range)"
 
-        if data[0] == "Log_data":
-            data = data[1]
+        if data["data_type"] == "Log_data":
+            data = data["data"]
             return f"User: {data['user']}, activity: \
 {data['action']} at {data['timestamp']}, 1 actions processed"
 
-        if data[0] == "measure_data":
-            data = data[1]
+        if data["data_type"] == "measure_data":
+            data = data["data"]
             return f"Stream summary: \
 {len(data)} readings, avg: {round(sum(data.values()) / len(data), 2)}°C"
 
