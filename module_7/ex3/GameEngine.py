@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 
-from abc import ABC, abstractmethod
+from .GameStrategy import GameStrategy
+from .CardFactory import CardFactory
 
 
-class GameStrategy(ABC):
-    @abstractmethod
-    def execute_turn(self, hand: list, battlefield: list) -> dict:
+class GameEngine:
+    def configure_engine(self, factory: CardFactory, strategy: GameStrategy) -> None:
         ...
 
-    @abstractmethod
-    def get_strategy_name(self) -> str:
+    def simulate_turn(self) -> dict:
         ...
 
-    @abstractmethod
-    def prioritize_targets(self, available_targets: list) -> list:
+    def get_engine_status(self) -> dict:
         ...

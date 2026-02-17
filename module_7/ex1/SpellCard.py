@@ -13,6 +13,7 @@ class SpellCard(Card):
         super().__init__(name, cost, rarity)
         self.effect_type: str = effect_type
         self.played: bool = False
+        self.used: bool = False
 
     def play(self, game_state: dict) -> dict:
         if self.played:
@@ -31,4 +32,49 @@ class SpellCard(Card):
         return {}
 
     def resolve_effect(self, targets: list) -> dict:
-        return {}
+
+        if not self.played:
+            print("Can't use a spell that is not played")
+            return {}
+
+        if self.used:
+            print()
+            return {}
+
+        try:
+            power: int = [
+                    int(s) for s in self.effect_type.split() if s.isdigit()
+                    ][0]
+        except Exception:
+            print("ERROR: No power in the effect")
+            return {}
+        else:
+            if "heal" in self.effect_type:
+                total_heal: int = 0
+                healed: int = 0
+                for target in targets:
+                    if target.played:
+                        target.health += power
+                        healed += 1
+                        total_heal += power
+                return {
+                        "effect": self.effect_type,
+                        "targets": targets,
+                        "healed_target": healed,
+                        "total_heal": total_heal
+                        }
+
+            killed: int = 0
+            total_damage: int = 0
+            for target in targets:
+                if target.played:
+                    target.health += power
+                    total_damage += power
+                    if target.health <= 0:
+                        killed += 1
+            return {
+                    "effect": self.effect_type,
+                    "targets": targets,
+                    "targets_killed": killed,
+                    "total_damage": total_heal
+                    }
