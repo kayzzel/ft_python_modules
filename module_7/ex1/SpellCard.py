@@ -2,6 +2,8 @@
 
 from . import Card
 
+from typing_extensions import override
+
 
 class SpellCard(Card):
     def __init__(self,
@@ -14,6 +16,15 @@ class SpellCard(Card):
         self.effect_type: str = effect_type
         self.played: bool = False
         self.used: bool = False
+
+    @override
+    def get_card_info(self) -> dict:
+        return {
+                "name": self.name,
+                "cost": self.cost,
+                "rarity": self.rarity,
+                "effect_type": self.effect_type
+                }
 
     def play(self, game_state: dict) -> dict:
         if self.played:
