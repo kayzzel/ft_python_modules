@@ -1,7 +1,6 @@
 #  m!/usr/bin/env python3
 
 from .EliteCard import EliteCard
-from ex0.CreatureCard import CreatureCard
 
 
 def main() -> None:
