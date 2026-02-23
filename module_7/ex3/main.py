@@ -1,19 +1,71 @@
 #!/usr/bin/env python3
 
-from .FantasyCardFactory import FantasyCardFactory
 from ex0.Card import Card
+from .FantasyCardFactory import FantasyCardFactory
+from .AggressiveStrategy import AggressiveStrategy
+from .GameEngine import GameEngine
+
+
+def main():
+    factorie: FantasyCardFactory = FantasyCardFactory()
+    strategy: AggressiveStrategy = AggressiveStrategy()
+
+    game_engine: GameEngine = GameEngine()
+
+    game_engine.configure_engine(factorie, strategy)
+
+    status: dict = game_engine.get_engine_status()
+
+    for player in ["player1", "player2"]:
+        print(f"player name: {status[player]['name']}")
+        print(f"player health: {status[player]['health']}")
+        print("player hand:")
+        print("\n".join(
+            str(card.get_card_info()) for card in status[player]['hand']
+            ))
+        print()
+
+    next_turn = True
+    while (next_turn):
+        turn: dict = game_engine.simulate_turn()
+
+        print(f"turn: {turn['turn_nbr']}")
+        for player in ["player1", "player2"]:
+            print(f"player turn: {status[player]['name']}")
+            print(f"player health: {status[player]['health']}")
+            print(f"player mana: {status[player]['available_mana']}")
+            if turn[player]["card_draw"]:
+                print("\ncard draw:")
+                print("\n".join(
+                    str(card.get_card_info())
+                    if isinstance(card, Card) else
+                    card
+                    for card in turn[player]["card_draw"]
+                    ))
+            if turn[player]["played_card"]:
+                print("\nplayed card:")
+                print("\n".join(
+                    attack for attack in turn[player]["played_card"]
+                    ))
+            if turn[player]["attacks"]:
+                print("\nattacks:")
+                print("\n".join(
+                    attack for attack in turn[player]["attacks"]
+                    ))
+            if turn[player]["artifacts"]:
+                print("\nartifacts:")
+                print("\n".join(
+                    artifact for artifact in turn[player]["artifacts"]
+                    ))
+            if turn[player]["enemy_died"]:
+                print()
+                print(f"player {status[player]['name']} won")
+                return ()
+            print("\n")
+
+        if input("continue (y/N) ") not in ["y", "Y"]:
+            next_turn = False
+
 
 if __name__ == "__main__":
-    factorie: FantasyCardFactory = FantasyCardFactory()
-
-    cards: Card = factorie.create_themed_deck(10)
-    print("Creatures")
-    for creature in cards["creatures"]:
-        print(creature.get_card_info())
-    print("\nSpells")
-    for spell in cards["spells"]:
-        print(spell.get_card_info())
-
-    print("\nArtifacts")
-    for artifact in cards["artifacts"]:
-        print(artifact.get_card_info())
+    main()

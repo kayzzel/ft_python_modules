@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
 
-from . import Deck, SpellCard, ArtifactCard, CreatureCard, Card
+from . import Deck, SpellCard, ArtifactCard, CreatureCard
 
 
 def main() -> None:
     deck: Deck = Deck()
-    game_state: dict = {
-            "available_mana": 50
-            }
 
     print("=== DataDeck Deck Builder ===")
 
     deck.add_card(CreatureCard("Fire Dragon", 5, "Legendary", 7, 5))
     deck.add_card(ArtifactCard("Mana Crystal", 2, "Rare",
-                               4, "Permanent: +1 mana per turn"))
+                               4, "Permanent: 1 mana per turn"))
     deck.add_card(SpellCard("Lightning Bolt", 3,
                             "Epic", "Deal 3 damage to target"))
 
+    deck.shuffle()
+    player1: dict = {
+            "available_mana": 50,
+            "deck": deck,
+            "hand": [],
+            "board": []
+            }
     print()
     print("Building deck with different card types...")
     print(f"Deck stats: {deck.get_deck_stats()}")
@@ -24,11 +28,11 @@ def main() -> None:
     print()
     print("Drawing and playing cards:")
     for _ in range(3):
-        drew: Card = deck.draw_card()
+        player1['hand'].append(deck.draw_card())
 
         print()
-        print(f"Drew: {drew.name}")
-        print(f"Play result: {drew.play(game_state)}")
+        print(f"Drew: {player1['hand'][0].name}")
+        print(f"Play result: {player1['hand'][0].play(player1)}")
 
     print()
     print("Polymorphism in action: Same interface, different card behaviors!")

@@ -19,9 +19,11 @@ class Deck:
         return False
 
     def shuffle(self) -> None:
-        self.__cards = shuffle(self.__cards)
+        shuffle(self.__cards)
 
     def draw_card(self) -> Card:
+        if len(self.__cards) <= 0:
+            return None
         return self.__cards.pop()
 
     def get_deck_stats(self) -> dict:
@@ -44,5 +46,6 @@ class Deck:
                 "creatures": creatures,
                 "spells": spells,
                 "artifacts": artifacts,
-                "avg_cost": round(total_cost / len(self.__cards), 2)
+                "avg_cost": 0 if len(self.__cards) == 0 else
+                round(total_cost / len(self.__cards), 2)
                 }

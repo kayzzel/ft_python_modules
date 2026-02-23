@@ -6,39 +6,46 @@ from . import CreatureCard
 def main() -> None:
     print("=== DataDeck Card Foundation ===")
 
-    game_state: dict = {
-            "available_mana": 10
+    player1: dict = {
+            "available_mana": 10,
+            "hand": [CreatureCard("Fire Dragon", 5, "Legendary", 7, 5)],
+            "board": []
             }
-
-    fire_dragon: CreatureCard = CreatureCard(
-            "Fire Dragon", 5, "Legendary", 7, 5
-            )
-
-    goblin_warrior: CreatureCard = CreatureCard(
-            "Goblin Warrior", 3, "Rare", 4, 5
-            )
+    player2: dict = {
+            "available_mana": 10,
+            "hand": [CreatureCard("Goblin Warrior", 3, "Rare", 4, 5)],
+            "board": []
+            }
 
     print()
     print("Testing Abstract Base Class Design:")
 
     print()
     print("CreatureCard Info:")
-    print(fire_dragon.get_card_info())
-
-    goblin_warrior.play(game_state)
+    print(player1["hand"][0].get_card_info())
+    player2["hand"][0].play(player2)
     print()
     print("Playing Fire Dragon with 6 mana available:")
-    print(f"Playable: {fire_dragon.is_playable(game_state['available_mana'])}")
-    print(f"Play result: {fire_dragon.play(game_state)}")
+    print(
+            "Playable: "
+            f"{player1['hand'][0].is_playable(player1['available_mana'])}"
+        )
+    print(f"Play result: {player1['hand'][0].play(player1)}")
 
     print()
     print("Fire Dragon attacks Goblin Warrior:")
-    print(f"Attack result: {fire_dragon.attack_target(goblin_warrior)}")
+    print(
+            f"Attack result: "
+            f"{player1['board'][0].attack_target(player2['board'][0])}"
+        )
 
-    game_state['available_mana'] = 3
+    player1['available_mana'] = 3
     print()
     print("Testing insufficient mana (3 available):")
-    print(f"Playable: {fire_dragon.is_playable(game_state['available_mana'])}")
+    print(
+            "Playable: "
+            f"{player1['board'][0].is_playable(player1['available_mana'])}"
+        )
 
     print()
     print("Abstract pattern successfully demonstrated!")

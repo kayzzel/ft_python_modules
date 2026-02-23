@@ -2,8 +2,6 @@
 
 from . import Card
 
-from typing_extensions import override
-
 
 class ArtifactCard(Card):
     def __init__(
@@ -17,14 +15,26 @@ class ArtifactCard(Card):
         super().__init__(name, cost, rarity)
         self.durability: int = durability
         self.effect: str = effect
-        self.played = False
+        self.__played = False
 
-    @override
+        self.attack: int = [
+                int(s) for s in self.effect.split() if s.isdigit()
+                ][0]
+
+    @property
+    def played(self) -> bool:
+        return self.__played
+
+    @played.setter
+    def played(self, played: bool) -> None:
+        raise ValueError("Can't change played from the outside")
+
     def get_card_info(self) -> dict:
         return {
                 "name": self.name,
                 "cost": self.cost,
                 "rarity": self.rarity,
+                "attack": self.attack,
                 "durability": self.durability,
                 "effect": self.effect
                 }
@@ -37,7 +47,16 @@ class ArtifactCard(Card):
 {self.cost} mana")
             print(f"Available mana: {game_state['available_mana']}")
         else:
-            self.played = True
+            self.__played = True
+            game_state["available_mana"] -= self.cost
+
+            card_index: int = next(
+                    (
+                        i for i, c in enumerate(game_state["hand"])
+                        if c.name == self.name
+                        ),
+                    None)
+            game_state["board"].append(game_state["hand"].pop(card_index))
             return {
                     "card_played": self.name,
                     "mana_used": self.cost,
@@ -47,62 +66,48 @@ class ArtifactCard(Card):
 
     def activate_ability(self, targets: list | None = None) -> dict:
         if not self.played:
-            print(f"{self.name} is not in play.")
+            print("/!\\ Error: played")
             return {}
 
         if self.durability <= 0:
-            print(f"{self.name} has no durability left.")
+            print("/!\\ Error: durability")
             return {}
 
-        try:
-            power = int([s for s in self.effect.split() if s.isdigit()][0])
-        except Exception:
-            print("ERROR: No numeric value found in artifact effect.")
-            return {}
-
-        result = {
-            "artifact": self.name,
-            "effect": self.effect,
-            "durability_before": self.durability
-        }
+        self.durability -= 1
 
         # Apply effect
-        if "damage" in self.effect and targets:
-            total_damage = 0
-            killed = 0
-            for target in targets:
-                if hasattr(target, "health") and target.played:
-                    target.health -= power
-                    total_damage += power
-                    if target.health <= 0:
-                        killed += 1
-
-            result.update({
-                "total_damage": total_damage,
-                "targets_killed": killed
-            })
-
-        elif "heal" in self.effect and targets:
+        if ("mana" in self.effect or "heal" in self.effect) and targets:
             total_heal = 0
             healed = 0
             for target in targets:
                 if hasattr(target, "health") and target.played:
-                    target.health += power
-                    total_heal += power
+                    target.health += self.attack
+                    total_heal += self.attack
                     healed += 1
 
-            result.update({
+            return {
+                "artifact": self.name,
+                "effect": self.effect,
+                "durability_before": self.durability + 1,
+                "durability_after": self.durability,
                 "total_heal": total_heal,
                 "targets_healed": healed
-            })
+            }
 
-        elif "mana" in self.effect:
-            result.update({
-                "mana_restored": power
-            })
+        total_damage: int = 0
+        killed: list = []
+        for target in targets:
+            if hasattr(target, "health") and target.played:
+                target.health -= self.attack
+                total_damage += self.attack
+                if target.health <= 0:
+                    killed.append(target)
 
-        # Reduce durability
-        self.durability -= 1
-        result["durability_after"] = self.durability
-
-        return result
+        return {
+            "artifact": self.name,
+            "effect": self.effect,
+            "durability_before": self.durability,
+            "durability_after": self.durability,
+            "total_damage": total_damage,
+            "targets_killed": killed
+        }

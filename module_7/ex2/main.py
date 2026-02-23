@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#  m!/usr/bin/env python3
 
 from .EliteCard import EliteCard
 from ex0.CreatureCard import CreatureCard
@@ -30,20 +30,28 @@ EliteCard capabilities:
             {"Fireball": 4}
             )
 
-    enemy: CreatureCard = CreatureCard(
+    enemy: EliteCard = EliteCard(
             "Enemy",
             3,
             "common",
             7,
-            3
+            3,
+            3,
+            2,
+            1,
+            {"Fireball": 4}
             )
 
-    enemy2: CreatureCard = CreatureCard(
+    enemy2: EliteCard = EliteCard(
             "Enemy2",
             3,
             "common",
             7,
-            3
+            3,
+            3,
+            2,
+            1,
+            {"Fireball": 4}
             )
 
     arcane_warrior.play(game_state)

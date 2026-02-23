@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from . import Card
-from typing_extensions import override
 
 
 class CreatureCard(Card):
@@ -26,7 +25,7 @@ class CreatureCard(Card):
     def attack(self, attack: int) -> None:
         if not isinstance(attack, int):
             raise ValueError(f"{attack} is not an integer")
-        elif not isinstance(attack, int):
+        elif attack < 0:
             raise ValueError(f"{attack} is not an positive number")
         else:
             self.__attack = attack
@@ -50,7 +49,6 @@ class CreatureCard(Card):
     def played(self, played: bool) -> None:
         raise ValueError("Can't change played from the outside")
 
-    @override
     def get_card_info(self) -> dict:
         return {
                 "name": self.name,
@@ -62,20 +60,32 @@ class CreatureCard(Card):
                 }
 
     def play(self, game_state: dict) -> dict:
+
         if self.played:
             print(f"Card {self.name} already played")
+
         elif not self.is_playable(game_state["available_mana"]):
             print(f"Not enougth mana to play {self.name} need at least\
 {self.cost} mana")
             print(f"Available mana: {game_state['available_mana']}")
+
         else:
             game_state["available_mana"] -= self.cost
             self.__played = True
+
+            card_index = next(
+                (i for i, c in enumerate(game_state["hand"])
+                 if c is self),
+                None
+            )
+            game_state["board"].append(game_state["hand"].pop(card_index))
+
             return {
                 "card_played": self.name,
                 "mana_used": self.cost,
                 "effect": "Creature summoned to battlefield"
                 }
+
         return {}
 
     def attack_target(self, target) -> dict:

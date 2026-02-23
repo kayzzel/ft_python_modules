@@ -12,7 +12,9 @@ class GameEngine:
         self.__game: dict = {}
 
     def configure_engine(
-            self, factory: CardFactory, strategy: GameStrategy
+            self,
+            factory: CardFactory,
+            strategy: GameStrategy
             ) -> None:
         if self.__configured:
             print("ERROR: Game Engine Already configured")
@@ -26,8 +28,8 @@ class GameEngine:
         self.__strategy = strategy
         self.__configured = True
 
-        def create_player(factory: CardFactory) -> dict:
-            name: str = input("what is your username: ")
+        def create_player(factory: CardFactory, player: str) -> dict:
+            name: str = player
 
             deck: Deck = Deck()
 
@@ -40,21 +42,41 @@ class GameEngine:
 
             return {
                     "name": name,
+                    "health": 5,
                     "deck": deck,
                     "hand": hand,
                     "board": [],
-                    "available_mana": 10
+                    "active_artifacts": [],
+                    "available_mana": 15
                     }
 
-        self.__game["player1"] = create_player(self.factory)
-        self.__game["player2"] = create_player(self.factory)
+        self.__game["player1"] = create_player(self.__factory, "player1")
+        self.__game["player2"] = create_player(self.__factory, "player2")
         self.__game["turn_nbr"] = 0
 
     def simulate_turn(self) -> dict:
-        ...
+        turn_result: dict = {}
+
+        self.__game["turn_nbr"] += 1
+
+        turn_result["player1"] = self.__strategy.execute_turn(
+                self.__game["player1"]["hand"],
+                [self.__game, "player1", "player2"]
+                )
+        self.__game["player1"]["available_mana"] += 10
+
+        turn_result["player2"] = self.__strategy.execute_turn(
+                self.__game["player2"]["hand"],
+                [self.__game, "player2", "player1"]
+                )
+        self.__game["player2"]["available_mana"] += 10
+
+        turn_result["turn_nbr"] = self.__game["turn_nbr"]
+
+        return turn_result
 
     def get_engine_status(self) -> dict:
-        status: dict = self.game
-        status["factory"] = self.factory
-        status["strategy"] = self.strategy
+        status: dict = self.__game
+        status["factory"] = self.__factory
+        status["strategy"] = self.__strategy
         return status

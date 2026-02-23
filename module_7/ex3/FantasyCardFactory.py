@@ -408,17 +408,21 @@ class FantasyCardFactory(CardFactory):
                 lambda:
                 created_card["creatures"].append(self.create_creature()),
                 lambda:
+                created_card["creatures"].append(self.create_creature()),
+                lambda:
+                created_card["creatures"].append(self.create_creature()),
+                lambda:
                 created_card["spells"].append(self.create_spell()),
                 lambda:
                 created_card["artifacts"].append(self.create_artifact())
                 ])
             create_card()
 
-        created_card["all_card"] = [
+        created_card["all_card"] = (
                 created_card["creatures"] +
                 created_card["spells"] +
                 created_card["artifacts"]
-                ]
+                )
 
         return created_card
 
