@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from . import Deck, SpellCard, ArtifactCard, CreatureCard
+from ex0 import CreatureCard
+from . import Deck, SpellCard, ArtifactCard
 
 
 def main() -> None:

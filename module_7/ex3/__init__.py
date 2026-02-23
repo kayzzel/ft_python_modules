@@ -1,7 +1,7 @@
 # Global Variables
 __all__: list[str] = [
     "GameEngine",
-    "GameStrategie",
+    "GameStrategy",
     "CardFactory",
     "AggressiveStrategy",
     "FantasyCardFactory"
@@ -9,7 +9,7 @@ __all__: list[str] = [
 
 # Imports
 from .GameEngine import GameEngine
-from .GameStrategie import GameStrategie
+from .GameStrategy import GameStrategy
 from .CardFactory import CardFactory
 from .AggressiveStrategy import AggressiveStrategy
 from .FantasyCardFactory import FantasyCardFactory

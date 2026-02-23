@@ -29,7 +29,7 @@ class GameEngine:
         self.__configured = True
 
         def create_player(factory: CardFactory, player: str) -> dict:
-            name: str = player
+            name: str = input(f"set {player} name: ")
 
             deck: Deck = Deck()
 

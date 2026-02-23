@@ -27,6 +27,9 @@ def main():
 
     next_turn = True
     while (next_turn):
+        if input("continue (y/N) ") not in ["y", "Y"]:
+            next_turn = False
+            break
         turn: dict = game_engine.simulate_turn()
 
         print(f"turn: {turn['turn_nbr']}")
@@ -62,9 +65,6 @@ def main():
                 print(f"player {status[player]['name']} won")
                 return ()
             print("\n")
-
-        if input("continue (y/N) ") not in ["y", "Y"]:
-            next_turn = False
 
 
 if __name__ == "__main__":
