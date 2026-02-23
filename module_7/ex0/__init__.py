@@ -1,5 +1,8 @@
 # Global Variables
-__all__: list[str] = ["Card", "CreatureCard"]
+__all__: list[str] = [
+    "Card",
+    "CreatureCard"
+]
 
 
 # Imports
