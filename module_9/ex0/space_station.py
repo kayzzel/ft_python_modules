@@ -14,7 +14,7 @@ class SpaceStation(BaseModel):
     is_operational: bool = Field(default=True)
     note: str | None = Field(max_length=200, default=None)
 
-    def __str__(self):
+    def __str__(self) -> str:
         base = (
             f"ID: {self.station_id}\n"
             f"Name: {self.name}\n"
@@ -29,7 +29,7 @@ class SpaceStation(BaseModel):
         return base
 
 
-def main():
+def main() -> None:
     valid_data: dict = {
             "station_id": "ID_001",
             "name": "this is a name",

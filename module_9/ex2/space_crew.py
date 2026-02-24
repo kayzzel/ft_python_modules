@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pydantic import BaseModel, Field, model_validator, ValidationError
+from typing_extensions import Self
 from datetime import datetime
 from enum import Enum
 
@@ -34,7 +35,7 @@ class SpaceMission(BaseModel):
     budget_millions: float = Field(ge=1, le=10000)
 
     @model_validator(mode="after")
-    def mission_validate_rules(self):
+    def mission_validate_rules(self) -> Self:
         if self.mission_id[0] != "M":
             raise ValueError("Mission ID must start with 'M'")
         if not [
@@ -54,7 +55,7 @@ class SpaceMission(BaseModel):
 
         return self
 
-    def __str__(self):
+    def __str__(self) -> str:
         crew_info = "\n".join(
             f"- {member.name} ({member.rank.value}) - {member.specialization}"
             for member in self.crew
@@ -72,7 +73,7 @@ class SpaceMission(BaseModel):
         )
 
 
-def main():
+def main() -> None:
     print("Space Mission Crew Validation")
     print("=========================================")
 

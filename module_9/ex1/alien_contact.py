@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pydantic import BaseModel, Field, model_validator, ValidationError
+from typing_extensions import Self
 from datetime import datetime
 from enum import Enum
 
@@ -24,7 +25,7 @@ class AlienContact(BaseModel):
     is_verified: bool = Field(default=False)
 
     @model_validator(mode="after")
-    def alien_contact_validator(self):
+    def alien_contact_validator(self) -> Self:
         if not self.contact_id.startswith("AC"):
             raise ValueError("Contact ID must start with 'AC' (Alien Contact)")
 
@@ -41,7 +42,7 @@ class AlienContact(BaseModel):
 
         return self
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"ID: {self.contact_id}\n"
             f"Type: {self.contact_type.value}\n"
@@ -53,7 +54,7 @@ class AlienContact(BaseModel):
         )
 
 
-def main():
+def main() -> None:
     print("Alien Contact Log Validation")
     print("======================================")
 
