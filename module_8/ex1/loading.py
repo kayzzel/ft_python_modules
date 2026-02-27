@@ -1,45 +1,45 @@
 #!/usr/bin/env python3
 
 import sys
-import os
 from importlib import import_module
 from importlib.metadata import version, PackageNotFoundError
 
-REQUIRED_PACKAGES = ["pandas", "numpy", "matplotlib"]
+REQUIRED_PACKAGES: list[str] = ["pandas", "numpy", "matplotlib"]
 
 
-def detect_environment():
-    """Detect whether running inside Poetry or standard pip environment"""
-    if "POETRY_ACTIVE" in os.environ:
-        return "Poetry"
+def detect_environment() -> str:
     if hasattr(sys, "real_prefix") or sys.prefix != sys.base_prefix:
-        return "Virtualenv (pip)"
-    return "System Python (pip)"
+        return "Virtualenv"
+    return "System Python"
 
 
-def check_dependencies():
+def check_dependencies() -> list[str]:
     """Check if required packages are installed and print versions"""
+
     print("Checking dependencies:")
-    missing = []
+    missing: list[str] = []
 
     # Trying for each module to import it with import_module
     # if there is an error print the appropriate message
     for package in REQUIRED_PACKAGES:
         try:
             import_module(package)
-            pkg_version = version(package)
+            pkg_version: str = version(package)
             print(f"[OK] {package} ({pkg_version}) - Ready")
+
         except ModuleNotFoundError:
             print(f"[MISSING] {package} - Not installed")
             missing.append(package)
+
         except PackageNotFoundError:
             print(f"[WARNING] {package} - Version info not found")
 
     return missing
 
 
-def print_install_instructions(missing):
+def print_install_instructions(missing: list[str]) -> None:
     """Show pip vs Poetry installation instructions"""
+
     print("\nMissing dependencies detected.\n")
 
     print("Install with pip:")
@@ -52,8 +52,9 @@ def print_install_instructions(missing):
     print("\nMissing packages:", ", ".join(missing))
 
 
-def analyze_matrix_data():
+def analyze_matrix_data() -> None:
     """Simulate matrix data and perform analysis"""
+
     print("\nAnalyzing Matrix data...")
 
     import numpy as np
@@ -63,10 +64,11 @@ def analyze_matrix_data():
     print("Processing 1000 data points...")
 
     # Simulated matrix (100x10)
-    matrix = np.random.randn(1000).reshape(100, 10)
-
+    matrix: np.ndarray[tuple[int, int], np.dtype[np.float64]] = (
+        np.random.randn(1000).reshape(100, 10)
+            )
     # Creating the dataframe
-    df = pd.DataFrame(matrix)
+    df: pd.DataFrame = pd.DataFrame(matrix)
 
     # Puting in the mean part the result of the "mean" of each row
     df["mean"] = df.mean(axis=1)
@@ -86,7 +88,7 @@ def analyze_matrix_data():
     print("Results saved to: matrix_analysis.png")
 
 
-def compare_management():
+def compare_management() -> None:
     """Explain pip vs Poetry differences"""
     print("\nDependency Management Comparison:")
     print("- pip uses requirements.txt")
@@ -99,7 +101,7 @@ def main():
     print("LOADING STATUS: Loading programs...")
     print(f"Environment detected: {detect_environment()}")
 
-    missing = check_dependencies()
+    missing: list[str] = check_dependencies()
 
     if missing:
         print_install_instructions(missing)

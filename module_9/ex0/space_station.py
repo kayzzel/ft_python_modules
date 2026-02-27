@@ -8,11 +8,11 @@ class SpaceStation(BaseModel):
     station_id: str = Field(min_length=3, max_length=10)
     name: str = Field(min_length=1, max_length=50)
     crew_size: int = Field(ge=1, le=20)
-    power_level: float = Field(ge=0, le=100)
-    oxygen_level: float = Field(ge=0, le=100)
+    power_level: float = Field(ge=0.0, le=100.0)
+    oxygen_level: float = Field(ge=0.0, le=100.0)
     last_maintenance: datetime
     is_operational: bool = Field(default=True)
-    note: str | None = Field(max_length=200, default=None)
+    notes: str | None = Field(max_length=200, default=None)
 
     def __str__(self) -> str:
         base = (
@@ -24,8 +24,8 @@ class SpaceStation(BaseModel):
             f"Status: \
 {'Operational' if self.is_operational else 'Non-Operational'}\n"
         )
-        if self.note:
-            base += f"Note: {self.note}\n"
+        if self.notes:
+            base += f"Note: {self.notes}\n"
         return base
 
 
@@ -37,7 +37,7 @@ def main() -> None:
             "power_level": 50.50,
             "oxygen_level": 18.20,
             "last_maintenance": "2026-02-23 14:30:00",
-            "note": "a test note"
+            "notes": "a test note"
             }
 
     invalid_data: dict = {
@@ -49,14 +49,19 @@ def main() -> None:
             "last_maintenance": "2026-02-23 14:30:00",
             }
 
-    station_1: SpaceStation = SpaceStation(**valid_data)
-
     print(
             "Space Station Data Validation\n"
             "========================================\n"
-            "Valide station created:"
+            "Valid station created:"
             )
-    print(station_1)
+
+    try:
+        station_1: SpaceStation = SpaceStation(**valid_data)
+    except ValidationError as err:
+        for error in err.errors():
+            print(error["msg"])
+    else:
+        print(station_1)
 
     print(
             "========================================\n"

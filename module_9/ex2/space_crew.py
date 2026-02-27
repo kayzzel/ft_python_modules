@@ -6,7 +6,7 @@ from datetime import datetime
 from enum import Enum
 
 
-class Rank(str, Enum):
+class Rank(Enum):
     CADET = "cadet"
     OFFICER = "officer"
     LIEUTENANT = "lieutenant"
@@ -32,11 +32,11 @@ class SpaceMission(BaseModel):
     duration_days: int = Field(ge=1, le=3650)
     crew: list[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: str = Field(default="planned")
-    budget_millions: float = Field(ge=1, le=10000)
+    budget_millions: float = Field(ge=1.0, le=10000.0)
 
     @model_validator(mode="after")
     def mission_validate_rules(self) -> Self:
-        if self.mission_id[0] != "M":
+        if not self.mission_id.startswith("M"):
             raise ValueError("Mission ID must start with 'M'")
         if not [
                 member for member in self.crew
@@ -77,7 +77,7 @@ def main() -> None:
     print("Space Mission Crew Validation")
     print("=========================================")
 
-    valid_data = {
+    valid_data: dict = {
         "mission_id": "M2024_MARS",
         "mission_name": "Mars Colony Establishment",
         "destination": "Mars",
@@ -115,7 +115,7 @@ def main() -> None:
         ]
     }
 
-    invalid_data = {
+    invalid_data: dict = {
         **valid_data,
         "crew": [
             {

@@ -6,7 +6,7 @@ from datetime import datetime
 from enum import Enum
 
 
-class Contact(str, Enum):
+class ContactType(Enum):
     RADIO = "radio"
     VISUAL = "visual"
     PHYSICAL = "physical"
@@ -17,8 +17,8 @@ class AlienContact(BaseModel):
     contact_id: str = Field(min_length=5, max_length=15)
     timestamp: datetime
     location: str = Field(min_length=3, max_length=100)
-    contact_type: Contact
-    signal_strength: float = Field(ge=0, le=10)
+    contact_type: ContactType
+    signal_strength: float = Field(ge=0.0, le=10.0)
     duration_minutes: int = Field(ge=1, le=1440)
     witness_count: int = Field(ge=1, le=100)
     message_received: str | None = Field(max_length=500, default=None)
@@ -29,10 +29,14 @@ class AlienContact(BaseModel):
         if not self.contact_id.startswith("AC"):
             raise ValueError("Contact ID must start with 'AC' (Alien Contact)")
 
-        if self.contact_type == Contact.PHYSICAL and not self.is_verified:
+        if self.contact_type == ContactType.PHYSICAL and not self.is_verified:
             raise ValueError("Physical contact reports must be verified")
 
-        if self.contact_type == Contact.TELEPATHIC and self.witness_count < 3:
+        if (
+            self.contact_type == ContactType.TELEPATHIC
+        ) and (
+            self.witness_count < 3
+        ):
             raise ValueError("Telepathic contact requires at least 3 witnesse")
 
         if self.signal_strength > 7 and not self.message_received:
@@ -58,11 +62,11 @@ def main() -> None:
     print("Alien Contact Log Validation")
     print("======================================")
 
-    valid_data = {
+    valid_data: dict = {
         "contact_id": "AC_2024_001",
         "timestamp": "2026-02-23T14:30:00",
         "location": "Area 51, Nevada",
-        "contact_type": "radio",
+        "contact_type": ContactType.RADIO,
         "signal_strength": 8.5,
         "duration_minutes": 45,
         "witness_count": 5,
@@ -70,20 +74,26 @@ def main() -> None:
         "is_verified": True
     }
 
-    invalid_data = {
+    invalid_data: dict = {
         "contact_id": "AC_2024_002",
         "timestamp": "2026-02-23T14:30:00",
         "location": "Nevada Desert",
-        "contact_type": "telepathic",
+        "contact_type": ContactType.TELEPATHIC,
         "signal_strength": 5.0,
         "duration_minutes": 20,
         "witness_count": 1,
         "is_verified": False
     }
 
-    contact_1 = AlienContact(**valid_data)
     print("Valid contact report:")
-    print(contact_1)
+
+    try:
+        contact_1 = AlienContact(**valid_data)
+    except ValidationError as err:
+        for error in err.errors():
+            print(error["msg"])
+    else:
+        print(contact_1)
 
     print()
     print("======================================")
