@@ -64,3 +64,22 @@ def spell_dispatcher() -> Callable:
         return [cast(s) for s in spell]
 
     return cast
+
+
+def main() -> None:
+    spells: list[int] = [1, 2, 3, 4, 5, 6, 7, 8]
+
+    print(f"""Testing spell reducer...
+Sum: {spell_reducer(spells, 'add')}
+Product: {spell_reducer(spells, 'multiply')}
+Max: {spell_reducer(spells, 'max')}
+""")
+
+    print(f"""Testing memoized fibonacci...
+Fib(10): {memoized_fibonacci(10)}
+Fib(15): {memoized_fibonacci(15)}
+          """)
+
+
+if __name__ == "__main__":
+    main()
