@@ -9,6 +9,7 @@ REQUIRED_PACKAGES = ["pandas", "numpy", "matplotlib"]
 
 
 def detect_environment():
+    """Detect whether running inside Poetry or standard pip environment"""
     if "POETRY_ACTIVE" in os.environ:
         return "Poetry"
     if hasattr(sys, "real_prefix") or sys.prefix != sys.base_prefix:
@@ -17,9 +18,12 @@ def detect_environment():
 
 
 def check_dependencies():
+    """Check if required packages are installed and print versions"""
     print("Checking dependencies:")
     missing = []
 
+    # Trying for each module to import it with import_module
+    # if there is an error print the appropriate message
     for package in REQUIRED_PACKAGES:
         try:
             import_module(package)
@@ -35,6 +39,7 @@ def check_dependencies():
 
 
 def print_install_instructions(missing):
+    """Show pip vs Poetry installation instructions"""
     print("\nMissing dependencies detected.\n")
 
     print("Install with pip:")
@@ -48,6 +53,7 @@ def print_install_instructions(missing):
 
 
 def analyze_matrix_data():
+    """Simulate matrix data and perform analysis"""
     print("\nAnalyzing Matrix data...")
 
     import numpy as np
@@ -59,11 +65,15 @@ def analyze_matrix_data():
     # Simulated matrix (100x10)
     matrix = np.random.randn(1000).reshape(100, 10)
 
+    # Creating the dataframe
     df = pd.DataFrame(matrix)
+
+    # Puting in the mean part the result of the "mean" of each row
     df["mean"] = df.mean(axis=1)
 
     print("Generating visualization...")
 
+    # Creationg the graph, puting the value in and saving it
     plt.figure()
     plt.plot(df["mean"])
     plt.title("Matrix Mean Values")
@@ -74,6 +84,15 @@ def analyze_matrix_data():
 
     print("Analysis complete!")
     print("Results saved to: matrix_analysis.png")
+
+
+def compare_management():
+    """Explain pip vs Poetry differences"""
+    print("\nDependency Management Comparison:")
+    print("- pip uses requirements.txt")
+    print("- Poetry uses pyproject.toml with locked dependencies")
+    print("- Poetry creates isolated virtual environments automatically")
+    print("- pip requires manual virtualenv management")
 
 
 def main():
@@ -87,6 +106,7 @@ def main():
         sys.exit(1)
 
     analyze_matrix_data()
+    compare_management()
 
 
 if __name__ == "__main__":
